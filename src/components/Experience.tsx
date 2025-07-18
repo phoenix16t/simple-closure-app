@@ -1,12 +1,28 @@
 import { Link, Text, View } from "@react-pdf/renderer";
 import { createTw } from "react-pdf-tailwind";
 
+type Job = {
+  organisation: {
+    name: string;
+    salesNavLink: string;
+  };
+  title: string;
+  dateStarted: string;
+  dateEnded: string;
+  location: string;
+  description?: string;
+};
+
+type ExperienceProps = {
+  data: Job[];
+};
+
 const tw = createTw({ theme: {} });
 
-export default function Experience({ data }) {
+export default function Experience({ data }: ExperienceProps) {
   return (
     <>
-      <Text style={(tw("text-4xl"), { lineHeight: 2 })}>Experience</Text>
+      <Text style={[tw("text-4xl mb-4"), { lineHeight: 1 }]}>Experience</Text>
       {data.map((job, i) => {
         return (
           <View key={`${job.title}-${i}`} style={tw("my-2")}>
@@ -15,7 +31,6 @@ export default function Experience({ data }) {
                 <Link
                   href={job.organisation.salesNavLink}
                   style={tw("font-bold mr-2 text-base underline")}
-                  target="_blank"
                 >
                   {job.organisation.name}
                 </Link>

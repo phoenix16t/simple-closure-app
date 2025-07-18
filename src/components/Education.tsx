@@ -1,12 +1,27 @@
 import { Link, Text, View } from "@react-pdf/renderer";
 import { createTw } from "react-pdf-tailwind";
 
+type School = {
+  organisation: {
+    name: string;
+    link: string;
+  };
+  degree: string;
+  fieldOfStudy: string;
+  dateStarted: string;
+  dateEnded: string;
+};
+
+type EducationProps = {
+  data: School[];
+};
+
 const tw = createTw({ theme: {} });
 
-export default function Education({ data }) {
+export default function Education({ data }: EducationProps) {
   return (
     <>
-      <Text style={(tw("text-4xl"), { lineHeight: 2 })}>Education</Text>
+      <Text style={[tw("text-4xl mb-4"), { lineHeight: 1 }]}>Education</Text>
       {data.map((school, i) => {
         return (
           <View key={`${school.degree}-${i}`} style={tw("my-2")}>
@@ -14,7 +29,6 @@ export default function Education({ data }) {
               <Link
                 href={school.organisation.link}
                 style={tw("font-bold mr-2 text-base underline")}
-                target="_blank"
               >
                 {school.organisation.name}
               </Link>
