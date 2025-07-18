@@ -1,18 +1,35 @@
+import { Page, Text, View, Document, Image } from "@react-pdf/renderer";
+import { PDFViewer } from "@react-pdf/renderer";
+import { createTw } from "react-pdf-tailwind";
+
 import { Education, Experience } from "./components";
 
 import data from "./assets/data.json";
 
+const tw = createTw({ theme: {} });
+
 function App() {
   return (
-    <div className="flex max-w-6xl flex-col gap-4 p-4">
-      <div className="flex flex-row items-center justify-center gap-4">
-        <img className="max-h-30 max-w-30 rounded-full" src={data.img} />
-        <h1 className="text-6xl">{data.name}'s resume</h1>
-      </div>
+    <PDFViewer style={{ width: "100vw", height: "100vh" }}>
+      <Document>
+        <Page size="A4">
+          <View style={tw("flex max-w-6xl flex-col p-4")}>
+            <View
+              fixed
+              style={tw("flex flex-row items-baseline justify-center my-2")}
+            >
+              <Image src={data.img} style={tw("w-28 h-28 mr-4")} />
+              <Text style={tw("text-4xl")}>{data.name}'s resume</Text>
+            </View>
 
-      <Experience data={data.experience} />
-      <Education data={data.education} />
-    </div>
+            <View style={tw("mb-10")}>
+              <Experience data={data.experience} />
+            </View>
+            <Education data={data.education} />
+          </View>
+        </Page>
+      </Document>
+    </PDFViewer>
   );
 }
 

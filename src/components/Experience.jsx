@@ -1,36 +1,42 @@
+import { Link, Text, View } from "@react-pdf/renderer";
+import { createTw } from "react-pdf-tailwind";
+
+const tw = createTw({ theme: {} });
+
 export default function Experience({ data }) {
   return (
     <>
-      <h2 className="text-4xl">Experience</h2>
-      <ul className="flex flex-col divide-y divide-gray-300">
-        {data.map((job, i) => {
-          return (
-            <li key={`${job.title}-${i}`} className="py-2">
-              <div className="flex flex-row justify-between">
-                <div className="flex gap-2">
-                  <a
-                    className="font-bold underline"
-                    href={job.organisation.salesNavLink}
-                    target="_blank"
-                  >
-                    {job.organisation.name}
-                  </a>
-                  -<div className="italic">{job.title}</div>
-                </div>
-                <div>
-                  {job.dateStarted} - {job.dateEnded}
-                </div>
-              </div>
-              <div>{job.location}</div>
-              <ul>
-                {job.description?.split("\n").map((line, j) => (
-                  <li key={j}>{line}</li>
-                ))}
-              </ul>
-            </li>
-          );
-        })}
-      </ul>
+      <Text style={(tw("text-4xl"), { lineHeight: 2 })}>Experience</Text>
+      {data.map((job, i) => {
+        return (
+          <View key={`${job.title}-${i}`} style={tw("my-2")}>
+            <View style={tw("flex flex-row justify-between")}>
+              <View style={tw("flex flex-row")}>
+                <Link
+                  href={job.organisation.salesNavLink}
+                  style={tw("font-bold mr-2 text-base underline")}
+                  target="_blank"
+                >
+                  {job.organisation.name}
+                </Link>
+                <Text style={tw("text-base italic")}>{job.title}</Text>
+              </View>
+
+              <Text style={tw("text-base")}>
+                {job.dateStarted} - {job.dateEnded}
+              </Text>
+            </View>
+
+            <Text style={tw("text-base")}>{job.location}</Text>
+
+            {job.description?.split("\n").map((line, j) => (
+              <Text key={j} style={tw("text-base")}>
+                {line}
+              </Text>
+            ))}
+          </View>
+        );
+      })}
     </>
   );
 }
