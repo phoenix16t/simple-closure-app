@@ -2,6 +2,7 @@ import js from "@eslint/js";
 import { defineConfig, globalIgnores } from "eslint/config";
 import importPlugin from "eslint-plugin-import";
 import prettierPlugin from "eslint-plugin-prettier";
+import reactPlugin from "eslint-plugin-react";
 import reactHooks from "eslint-plugin-react-hooks";
 import reactRefresh from "eslint-plugin-react-refresh";
 import globals from "globals";
@@ -62,11 +63,23 @@ export default defineConfig([
           "newlines-between": "always",
         },
       ],
+      "react/jsx-sort-props": [
+        "error",
+        {
+          callbacksLast: false,
+          shorthandFirst: false,
+          shorthandLast: false,
+          ignoreCase: true,
+          noSortAlphabetically: false,
+          reservedFirst: true,
+        },
+      ],
       "prettier/prettier": "error",
     },
     plugins: {
       import: importPlugin,
       prettier: prettierPlugin,
+      react: reactPlugin,
     },
   },
 ]);
