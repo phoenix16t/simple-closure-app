@@ -1,37 +1,61 @@
-import { useState } from "react";
-
-import viteLogo from "/vite.svg";
-
-import reactLogo from "./assets/react.svg";
-
-import "./App.css";
+import data from "./assets/data.json";
 
 function App() {
-  const [count, setCount] = useState(0);
-
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
+    <div className="flex flex-col gap-4">
+      <h1 className="text-6xl">Resume</h1>
+
+      <h2 className="text-4xl">Experience</h2>
+      <ul className="flex flex-col divide-y divide-gray-300">
+        {data.experience.map((job, i) => {
+          return (
+            <li className="py-2" key={`${job.title}-${i}`}>
+              <div className="flex flex-row justify-between">
+                <div className="flex gap-2">
+                  <a href={job.organisation.salesNavLink} target="_blank">
+                    {job.organisation.name}
+                  </a>
+                  -<div className="italic">{job.title}</div>
+                </div>
+                <div>
+                  {job.dateStarted} - {job.dateEnded}
+                </div>
+              </div>
+              <div>{job.location}</div>
+              <ul>
+                {job.description?.split("\n").map((line, j) => (
+                  <li key={j}>{line}</li>
+                ))}
+              </ul>
+            </li>
+          );
+        })}
+      </ul>
+
+      <h2 className="text-4xl">Education</h2>
+      <ul className="flex flex-col divide-y divide-gray-300">
+        {data.education.map((schooling, i) => {
+          return (
+            <li className="py-2" key={`${schooling.degree}-${i}`}>
+              <div className="flex flex-row justify-between">
+                <div className="flex gap-2">
+                  <a href={schooling.organisation.link} target="_blank">
+                    {schooling.organisation.name}
+                  </a>
+                </div>
+                <div>
+                  {schooling.dateStarted} - {schooling.dateEnded}
+                </div>
+              </div>
+              <div className="flex flex-row gap-2">
+                <div className="italic">{schooling.degree}</div>
+                <div>{schooling.fieldOfStudy}</div>
+              </div>
+            </li>
+          );
+        })}
+      </ul>
+    </div>
   );
 }
 
