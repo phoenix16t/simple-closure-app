@@ -4,4 +4,13 @@ import { defineConfig } from "vite";
 
 export default defineConfig({
   plugins: [react(), tailwindcss()],
+  server: {
+    proxy: {
+      "/lixapi": {
+        target: "https://api.lix-it.com",
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/lixapi/, ""),
+      },
+    },
+  },
 });

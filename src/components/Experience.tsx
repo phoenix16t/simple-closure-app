@@ -13,7 +13,7 @@ type Job = {
   description?: string;
 };
 
-type ExperienceProps = {
+export type ExperienceProps = {
   data: Job[];
 };
 

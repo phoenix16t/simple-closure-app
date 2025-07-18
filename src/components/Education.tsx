@@ -12,7 +12,7 @@ type School = {
   dateEnded: string;
 };
 
-type EducationProps = {
+export type EducationProps = {
   data: School[];
 };
 

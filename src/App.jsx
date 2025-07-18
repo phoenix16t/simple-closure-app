@@ -1,35 +1,67 @@
-import { Page, Text, View, Document, Image } from "@react-pdf/renderer";
 import { PDFViewer } from "@react-pdf/renderer";
-import { createTw } from "react-pdf-tailwind";
+import axios from "axios";
+import { useState } from "react";
 
-import { Education, Experience } from "./components";
-
-import data from "./assets/data.json";
-
-const tw = createTw({ theme: {} });
+import ResumeViewer from "./components/ResumeViewer";
 
 function App() {
-  return (
-    <PDFViewer style={{ width: "100vw", height: "100vh" }}>
-      <Document>
-        <Page size="A4">
-          <View style={tw("flex max-w-6xl flex-col p-4")}>
-            <View
-              fixed
-              style={tw("flex flex-row items-baseline justify-center my-2")}
-            >
-              <Image src={data.img} style={tw("w-28 h-28 mr-4")} />
-              <Text style={tw("text-4xl")}>{data.name}'s resume</Text>
-            </View>
+  const [username, setUsername] = useState("");
+  const [data, setData] = useState(null);
+  const [loading, setLoading] = useState(false);
 
-            <View style={tw("mb-10")}>
-              <Experience data={data.experience} />
-            </View>
-            <Education data={data.education} />
-          </View>
-        </Page>
-      </Document>
-    </PDFViewer>
+  async function fetchPerson(linkedin) {
+    setLoading(true);
+    try {
+      const response = await axios.get("/lixapi/v1/person", {
+        params: {
+          profile_link: `https://www.linkedin.com/in/${linkedin}`,
+        },
+        headers: {
+          Authorization: import.meta.env.VITE_API_KEY,
+        },
+      });
+      setData(response.data);
+    } catch (error) {
+      alert("Error:", error.message);
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  function handleSubmit(e) {
+    e.preventDefault();
+    if (username) fetchPerson(username);
+  }
+
+  return (
+    <div className="flex min-h-screen flex-col items-center bg-gray-50 p-4">
+      <form className="flex items-center" onSubmit={handleSubmit}>
+        <label>
+          Enter LinkedIn Username:&nbsp;
+          <input
+            className="rounded border"
+            onChange={(e) => setUsername(e.target.value)}
+            placeholder="Username"
+            value={username}
+          />
+        </label>
+        <button
+          className="ml-2 flex rounded border bg-green-500 p-1 text-white hover:bg-blue-600 disabled:cursor-not-allowed disabled:bg-gray-400"
+          disabled={loading || !username}
+          type="submit"
+        >
+          {loading ? "Loading..." : "Load Resume"}
+        </button>
+      </form>
+
+      {data && (
+        <PDFViewer
+          style={{ width: "850px", height: "1100px", maxWidth: "100%" }}
+        >
+          <ResumeViewer data={data} />
+        </PDFViewer>
+      )}
+    </div>
   );
 }
 
